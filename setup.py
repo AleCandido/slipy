@@ -74,7 +74,7 @@ def setup_package():
             "Programming Language :: Python",
             "Programming Language :: Python :: 3",
         ],
-        install_requires=[],
+        install_requires=["toml", "pygit2"],
         setup_requires=["wheel", "pygit2"],
         # entry_points={
         # "console_scripts": [
