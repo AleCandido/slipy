@@ -5,6 +5,14 @@
 - `slides_cli`: cli for managing slides projects
   - `init` consider to be in a new folder and initialize required material, in
     particular a `slipy.toml` file (like `git init` with `.git` folder)
+    - `reveal`: creates a subfolder `.reveal_dist` with minimal reveal contents
+    - `beamer`: creates a subfolder with all the templates and header
+  - `build`: takes care to bundle everything in a single visualizable file
+  - `export`: prepare a package with all the content needed to reproduce the
+    develop environment, and the built artifact/s (bundled `html` and/or final `pdf`)
+- `slipy`: framework for organizing multiple templates
+  - `reveal`: expect source files (`index.html`, or `{0,1,2,3,...,footer}.html`
+    or whatever) in the main folder
 
 ## Reveal
 

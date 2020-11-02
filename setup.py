@@ -23,7 +23,7 @@ SHORT_VERSION = "%d.%d" % (MAJOR, MINOR)
 VERSION = "%d.%d.%d" % (MAJOR, MINOR, MICRO)
 
 
-def write_version_py(filename="src/libmake/version.py"):
+def write_version_py(filename="src/slipy/version.py"):
     cnt = """
 # THIS FILE IS GENERATED FROM SETUP.PY
 major = %(major)d
