@@ -1,5 +1,13 @@
 # Reorganization
 
+## Package structure
+
+- `slides_cli`: cli for managing slides projects
+  - `init` consider to be in a new folder and initialize required material, in
+    particular a `slipy.toml` file (like `git init` with `.git` folder)
+
+## Reveal
+
 - `minimal-reveal`: contains the minimal runtime dependency
   - `dist`: the packaged `javascript`
   - `dist/theme`: the predefined themes (`css` compiled from `scss`)
@@ -9,7 +17,7 @@
     compiled `js` and `css`
 - `src`: old scripts and templates to be rearranged in a package
 
-## Plan
+### Plan
 
 - `js`: the bundled `js` should be compiled in the main project (following
   `update.sh`) and exported
@@ -19,10 +27,10 @@
 - `plugin`: exactly as `js`, compile in the project and export the compiled (for
   simplicity export the full `plugin` folder after build)
 
-### scripts
+#### scripts
 
-- reorganize the scripts in a python package, with entrypoints for calling
-  stuffs, exploiting `libmake.py` (maybe directly inside the package), in
+- reorganize the scripts in `slipy`, with entry-point (with subcommands) in
+  `slides_cli`, exploiting `libmake.py` (maybe directly inside the package), in
   order to not recompile unneeded stuffs
 - ship assets/templates in a parallel python package, with importer scripts to
   make them available
