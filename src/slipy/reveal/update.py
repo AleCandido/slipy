@@ -1,11 +1,12 @@
-import shutil
 import pathlib
+import shutil
 import subprocess
 import sys
 import logging
 
-import toml
 import pygit2
+
+from slipy_assets.reveal import reveal_cfg
 
 logging.basicConfig(
     stream=sys.stdout,
@@ -13,8 +14,6 @@ logging.basicConfig(
     format="[%(levelname)s]: %(message)s (%(name)s)",
 )
 logger = logging.getLogger(__name__)
-
-reveal_cfg = toml.load("reveal.toml")
 
 
 def build_dist(folder):
@@ -39,10 +38,12 @@ def extract_essentials(folder, dest):
     logger.debug("Export dist: copied 'plugin'")
 
 
-def get_reveal():
+def get_reveal(project_dir):
+    project_path = pathlib.Path(project_dir)
+
     url = reveal_cfg["repo"]["url"]
-    tmp_folder = pathlib.Path("reveal_tmp")
-    dest = pathlib.Path(".reveal_dist")
+    tmp_folder = project_path / "reveal_tmp"
+    dest = project_path / ".reveal_dist"
 
     shutil.rmtree(tmp_folder, ignore_errors=True)
 
@@ -64,7 +65,3 @@ def get_reveal():
     extract_essentials(tmp_folder, dest)
 
     shutil.rmtree(tmp_folder)
-
-
-if __name__ == "__main__":
-    get_reveal()

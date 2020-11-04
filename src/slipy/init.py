@@ -2,7 +2,10 @@ import pathlib
 
 import toml
 
-template_cfg = toml.load("presentation.toml")
+from .reveal import update
+
+here = pathlib.Path(__file__).parent
+template_cfg = toml.load(here / "presentation.toml")
 
 
 def make_project():
@@ -15,10 +18,14 @@ def make_project():
     with open(presentation_cfg, "w") as f:
         toml.dump(template_cfg, f)
 
-
-def init():
-    pass
+    return project_dir
 
 
-if __name__ == "__main__":
-    make_project()
+def init(framework):
+    project_dir = make_project()
+    if framework == "reveal":
+        update.get_reveal(project_dir)
+    elif framework == "beamer":
+        pass
+    else:
+        raise ValueError("unknown framework selected")
