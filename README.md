@@ -8,8 +8,13 @@
     - `reveal`: creates a subfolder `.reveal_dist` with minimal reveal contents
     - `beamer`: creates a subfolder with all the templates and header
   - `build`: takes care to bundle everything in a single visualizable file
+    - including `js` and `css`, no matter if it's a mess, it's just the built
+        version (you will never try to edit a pdf)
   - `export`: prepare a package with all the content needed to reproduce the
     develop environment, and the built artifact/s (bundled `html` and/or final `pdf`)
+    - only with the stuffs used (for example with a single theme, then provide a
+      command to retrieve all the others in an exported folder, they will be
+      retrieved immediately since they are installed with `slipy` itself)
 - `slipy`: framework for organizing multiple templates
   - `reveal`: expect source files (`index.html`, or `{0,1,2,3,...,footer}.html`
     or whatever) in the main folder
@@ -32,6 +37,9 @@
 - `fonts`: export the one provided, for further ones use instead a CDN
 - `css`: export full build-system for themes, in order to provide the new ones
   aside those already provided by `reveal.js`
+  - install themes with `slipy`, still provide a way to get the updated ones
+      from `reveal` project, using `reveal-white.css` instead of `white.css`
+      (that will point to the one installed with `slipy`)
 - `plugin`: exactly as `js`, compile in the project and export the compiled (for
   simplicity export the full `plugin` folder after build)
 
