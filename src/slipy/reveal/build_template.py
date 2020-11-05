@@ -30,6 +30,7 @@ def main(here):
         slide = Slide(metadata, content)
         slides.append(slide)
 
+    data["reveal_dist"] = ".reveal_dist"
     data["slides"] = slides
 
     # dump the result

@@ -5,4 +5,4 @@ framework = 'reveal'
 name = 'split'
 
 [theme]
-name = 'white.css'
+name = 'white'
