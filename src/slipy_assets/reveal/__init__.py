@@ -13,7 +13,8 @@ class Template:
         path = here / "templates" / name
 
         self.template = path / "template.html"
-        with open(path / "structure.yaml") as f:
+        self.structure_path = path / "structure.yaml"
+        with open(self.structure_path) as f:
             self.structure = yaml.safe_load(f)
 
 

@@ -1,10 +1,8 @@
-# use this file to choose structure, theme, and some other common configs
-
-title = "disaas-to-n3pdf"
-framework = "reveal"
+title = ''
+framework = 'reveal'
 
 [template]
-name = "split-html-only"
+name = 'split'
 
 [theme]
-name = "white.css"
+name = 'white.css'

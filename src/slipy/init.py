@@ -1,8 +1,11 @@
 import pathlib
+import shutil
 
 import toml
 
 from slipy_assets import template_cfg
+from slipy_assets.reveal import Template, Theme
+
 from .reveal import update
 
 
@@ -27,3 +30,15 @@ def init(framework):
         pass
     else:
         raise ValueError("unknown framework selected")
+
+
+def checkout_assets(folder):
+    path = pathlib.Path(folder)
+    presentation_cfg = toml.load(path / "presentation.toml")
+
+    template = Template(presentation_cfg.template.name)
+    shutil.copy2(template.template, path)
+    shutil.copy2(template.structure_path, path)
+
+    theme = Theme(presentation_cfg.theme.name)
+    shutil.copy2(theme.style, path)
