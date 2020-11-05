@@ -2,10 +2,8 @@ import pathlib
 
 import toml
 
+from slipy_assets import template_cfg
 from .reveal import update
-
-here = pathlib.Path(__file__).parent
-template_cfg = toml.load(here / "presentation.toml")
 
 
 def make_project():
