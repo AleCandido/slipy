@@ -3,6 +3,11 @@ import argparse
 from . import new
 from . import init
 from . import update
+from . import preview
+from . import build
+from . import view
+from . import inflate
+
 
 parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers(help="subcommand help")
