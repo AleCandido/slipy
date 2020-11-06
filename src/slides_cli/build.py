@@ -7,4 +7,4 @@ def build(args):
     slipy.build.build(pathlib.Path(".").absolute())
 
 
-help = {".": """Update assets according to 'presentation.toml'"""}
+help = {".": """Build the package to be exported"""}

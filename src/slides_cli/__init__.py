@@ -23,11 +23,30 @@ new_p.set_defaults(func=new.new)
 init_p = subparsers.add_parser("init", help=init.help["."])
 init_p.set_defaults(func=init.init)
 
-# init
+# update
 update_p = subparsers.add_parser("update", help=update.help["."])
 update_p.set_defaults(func=update.update)
+
+# preview
+preview_p = subparsers.add_parser("preview", help=preview.help["."])
+preview_p.set_defaults(func=preview.preview)
+
+# build
+build_p = subparsers.add_parser("build", help=build.help["."])
+build_p.set_defaults(func=build.build)
+
+# view
+view_p = subparsers.add_parser("view", help=view.help["."])
+view_p.set_defaults(func=view.view)
+
+# inflate
+inflate_p = subparsers.add_parser("inflate", help=inflate.help["."])
+inflate_p.set_defaults(func=inflate.inflate)
 
 
 def run_slipy():
     args = parser.parse_args()
-    args.func(args)
+    try:
+        args.func(args)
+    except AttributeError:
+        print(parser.format_help())

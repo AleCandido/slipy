@@ -70,17 +70,24 @@ def setup_package():
         url="https://github.com/AleCandido/libmake.py",
         package_dir={"": "src"},
         packages=find_packages("src"),
+        package_data={
+            "slipy_assets": [
+                "presentation.toml",
+                "reveal/reveal.toml",
+                "reveal/templates/*",
+                "reveal/templates/**/*",
+                "reveal/templates/**/**/*",
+                "reveal/themes/*",
+                "reveal/themes/**/*",
+            ]
+        },
         classifiers=[
             "Programming Language :: Python",
             "Programming Language :: Python :: 3",
         ],
-        install_requires=["pyyaml", "toml", "pygit2"],
+        install_requires=["pyyaml", "toml", "jinja2", "frontmatter", "pygit2"],
         setup_requires=["wheel", "pygit2"],
-        entry_points={
-            "console_scripts": [
-                "slipy=slides_cli:run_slipy",
-            ],
-        },
+        entry_points={"console_scripts": ["slipy=slides_cli:run_slipy",],},
         python_requires=">=3.7",
     )
 
