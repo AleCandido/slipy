@@ -36,8 +36,7 @@ def build(folder):
             else:
                 shutil.copy2(str(f.absolute()), src_dir)
 
+    src_dir = src_dir.rename("src")
     src_dest = shutil.move(str(src_dir), build_dir)
     shutil.copytree(str(folder / ".reveal_dist"), build_dir / ".reveal_dist")
     shutil.copytree(str(folder / ".presentation"), build_dir / ".presentation")
-
-    pathlib.Path(src_dest).rename(folder / "src")

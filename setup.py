@@ -85,7 +85,7 @@ def setup_package():
             "Programming Language :: Python",
             "Programming Language :: Python :: 3",
         ],
-        install_requires=["pyyaml", "toml", "jinja2", "frontmatter", "pygit2"],
+        install_requires=["pyyaml", "toml", "jinja2", "frontmatter", "lz4", "pygit2"],
         setup_requires=["wheel", "pygit2"],
         entry_points={"console_scripts": ["slipy=slides_cli:run_slipy",],},
         python_requires=">=3.7",
