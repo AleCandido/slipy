@@ -1,8 +1,6 @@
 import pathlib
 import importlib
 
-import toml
-
 from . import utils
 
 
@@ -10,7 +8,7 @@ def update(folder):
     project_dir = pathlib.Path(folder)
     assets_dir = project_dir / ".presentation"
 
-    presentation_cfg = toml.load(project_dir / "presentation.toml")
+    presentation_cfg = utils.load_cfg(project_dir)
     update_template(assets_dir, presentation_cfg)
     update_theme(assets_dir, presentation_cfg)
 

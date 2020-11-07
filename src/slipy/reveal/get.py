@@ -1,3 +1,16 @@
+"""
+Get reveal version.
+
+.. todo::
+    manage a cache:
+
+        - the reveal project should be downloaded and built in
+          '~/.local/share/slipy` (allow for a prefix to be passed instead and
+           register it in a file relative to this one)
+        - allow for a CLI option to explicitly invalidate the cache,
+          automatically invalidate after a couple of months
+
+"""
 import pathlib
 import shutil
 import subprocess

@@ -1,7 +1,5 @@
 import pathlib
 
-import toml
-
 from slipy_assets.reveal import Template, Theme
 
 from . import utils
@@ -21,9 +19,10 @@ def new(name, framework):
 
 def checkout_assets(folder):
     project_dir = pathlib.Path(folder)
+
+    presentation_cfg = utils.load_cfg(project_dir)
     assets_dir = project_dir / ".presentation"
     assets_dir.mkdir(exist_ok=True)
-    presentation_cfg = toml.load(project_dir / "presentation.toml")
 
     template = Template(presentation_cfg["template"]["name"])
     template.unpack(assets_dir)

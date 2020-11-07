@@ -6,6 +6,7 @@ from . import update
 from . import preview
 from . import build
 from . import view
+from . import export
 from . import inflate
 
 
@@ -13,40 +14,39 @@ parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers(help="subcommand help")
 
 # new
-new_p = subparsers.add_parser("new", help=new.help["."])
-new_p.add_argument("name", nargs=1)
-new_p.add_argument("-f", "--framework", default="reveal")
-new_p.add_argument("--pdf", help=new.help["pdf"])
-new_p.set_defaults(func=new.new)
+new.add_parser(subparsers)
 
 # init
-init_p = subparsers.add_parser("init", help=init.help["."])
-init_p.set_defaults(func=init.init)
+init.add_parser(subparsers)
 
 # update
-update_p = subparsers.add_parser("update", help=update.help["."])
-update_p.set_defaults(func=update.update)
+update.add_parser(subparsers)
 
 # preview
-preview_p = subparsers.add_parser("preview", help=preview.help["."])
-preview_p.set_defaults(func=preview.preview)
+preview.add_parser(subparsers)
 
 # build
-build_p = subparsers.add_parser("build", help=build.help["."])
-build_p.set_defaults(func=build.build)
+build.add_parser(subparsers)
 
 # view
-view_p = subparsers.add_parser("view", help=view.help["."])
-view_p.set_defaults(func=view.view)
+view.add_parser(subparsers)
+
+# export
+export.add_parser(subparsers)
 
 # inflate
-inflate_p = subparsers.add_parser("inflate", help=inflate.help["."])
-inflate_p.set_defaults(func=inflate.inflate)
+inflate.add_parser(subparsers)
 
 
 def run_slipy():
     args = parser.parse_args()
     try:
         args.func(args)
-    except AttributeError:
-        print(parser.format_help())
+    except AttributeError as e:
+        if (
+            len(e.args) > 0
+            and e.args[0] == "'Namespace' object has no attribute 'func'"
+        ):
+            print(parser.format_help())
+        else:
+            raise
