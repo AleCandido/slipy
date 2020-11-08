@@ -25,15 +25,7 @@ def export(folder):
     title = utils.get_norm_title()
     framework = utils.load_cfg(folder)["framework"]
 
-    actions = {
-        "reveal": (
-            lambda: importlib.import_module(".reveal", package=__package__).clean(
-                folder
-            )
-        ),
-        "beamer": (lambda: None),
-    }
-    utils.switch_framework(framework, actions)
+    utils.switch_framework(framework).clean(folder)
     collect(folder, title, framework)
 
 
@@ -49,12 +41,7 @@ def collect(folder, title, framework):
     src_dir = folder / "src.tmp"
     src_dir.mkdir()
 
-    if framework == "reveal":
-        dev_files = importlib.import_module(".reveal", package=__package__).dev_files
-    elif framework == "beamer":
-        pass
-    else:
-        raise ValueError()
+    dev_files = utils.switch_framework(framework).dev_files
 
     gen_assets = [p.name for p in [src_dir, collect_dir, build_dir]]
     gen_assets.extend(dev_files)

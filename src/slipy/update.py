@@ -1,5 +1,4 @@
 import pathlib
-import importlib
 
 from . import utils
 
@@ -15,32 +14,13 @@ def update(folder):
 
 def update_template(assets_dir, presentation_cfg):
     framework = presentation_cfg["framework"]
-
     name = presentation_cfg["template"]["name"]
-    actions = {
-        "reveal": (
-            lambda: importlib.import_module(
-                ".reveal.assets", package=__package__
-            ).update_template(name, assets_dir)
-        ),
-        "beamer": (lambda: None),
-    }
 
-    utils.switch_framework(framework, actions)
+    utils.switch_framework(framework).assets.update_template(name, assets_dir)
 
 
 def update_theme(assets_dir, presentation_cfg):
     framework = presentation_cfg["framework"]
-
     name = presentation_cfg["theme"]["name"]
 
-    actions = {
-        "reveal": (
-            lambda: importlib.import_module(
-                ".reveal.assets", package=__package__
-            ).update_theme(name, assets_dir)
-        ),
-        "beamer": (lambda: None),
-    }
-
-    utils.switch_framework(framework, actions)
+    utils.switch_framework(framework).assets.update_theme(name, assets_dir)

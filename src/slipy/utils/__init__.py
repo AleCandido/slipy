@@ -1,4 +1,5 @@
 import pathlib
+import importlib
 
 import toml
 
@@ -22,8 +23,8 @@ def check_slipy_project(project_dir="."):
         raise RuntimeError(f"'{project_dir}' is not a slipy project")
 
 
-def switch_framework(framework, actions):
+def switch_framework(framework):
     try:
-        return actions[framework]()
-    except KeyError:
-        raise ValueError("unknown framework selected")
+        return importlib.import_module(f"..{framework}", package=__package__)
+    except ModuleNotFoundError:
+        raise ValueError(f"unknown framework selected: {framework}")
