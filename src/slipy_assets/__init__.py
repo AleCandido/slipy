@@ -1,4 +1,6 @@
+import sys
 import pathlib
+import importlib
 import shutil
 import distutils.dir_util
 
@@ -23,6 +25,16 @@ class Template:
         with open(self.structure_path) as f:
             self.structure = yaml.safe_load(f)
         self.examples = path / "examples"
+
+        try:
+            sys.path.insert(0, str(path.absolute()))
+            self.update_build_context = importlib.import_module(
+                "build"
+            ).update_build_context
+        except ModuleNotFoundError:
+            self.update_build_context = lambda *args, **kwargs: None
+        finally:
+            sys.path.pop(0)
 
     def unpack(self, assets_dir):
         shutil.copy2(self.template, assets_dir)
