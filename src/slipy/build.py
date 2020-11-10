@@ -2,6 +2,7 @@
 Build everything needed to *show* the presentation, if possible in a single file
 """
 import pathlib
+import shutil
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -11,8 +12,10 @@ from . import utils
 
 
 def build(folder):
-    folder = pathlib.Path(folder)
-    presentation_cfg = utils.load_cfg(folder)
+    project_dir = pathlib.Path(folder).absolute()
+    build_dir = project_dir / "build"
+
+    presentation_cfg = utils.load_cfg(project_dir)
     template_name = presentation_cfg["template"]["name"]
     framework = presentation_cfg["framework"]
     template = Template(template_name, framework)
@@ -20,7 +23,10 @@ def build(folder):
     # prepare environment
     # -------------------
 
-    env = Environment(loader=FileSystemLoader(str(folder.absolute())))
+    if not (build_dir).exists():
+        build_dir.mkdir()
+
+    env = Environment(loader=FileSystemLoader(str(project_dir.absolute())))
 
     # load data
     # ---------
@@ -30,11 +36,17 @@ def build(folder):
     data["reveal_dist"] = ".reveal_dist"
     data["theme"] = presentation_cfg["theme"]["name"]
 
-    template.update_build_context(data, folder)
+    template.update_build_context(data, project_dir)
 
     # dump the result
     # ---------------
 
-    template = env.get_template(".presentation/template.html")
-    stream = template.stream(data)
-    stream.dump(str(folder.absolute() / "index.html"))
+    j_template = env.get_template(".presentation/template.html")
+    stream = j_template.stream(data)
+    stream.dump(str(build_dir / "index.html"))
+
+    # provide dist
+    # ------------
+    dist = project_dir / utils.switch_framework(framework).dist_files
+    shutil.rmtree(build_dir / dist.name, ignore_errors=False)
+    shutil.copytree(str(dist.absolute()), str(build_dir / dist.name))

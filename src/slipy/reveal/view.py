@@ -1,14 +1,21 @@
 import pathlib
-import socket
-import errno
 import logging
-import logging.config
+import errno
+import socket
+import webbrowser
 
-from httpwatcher import HttpWatcherServer
+import httpwatcher
 from tornado.ioloop import IOLoop
 
 
-def main(here, root):
+def view(folder):
+    project_dir = pathlib.Path(folder).absolute()
+    webbrowser.open(str(project_dir / "build" / "index.html"))
+
+
+def preview(folder):
+    project_dir = pathlib.Path(folder).absolute()
+
     # test if already connected
     # -------------------------
 
@@ -27,21 +34,17 @@ def main(here, root):
     # init the logger
     # ---------------
 
-    logging.config.fileConfig(here / "logging.conf")
-
-    logger = logging.getLogger("make.inflate")
+    logger = logging.getLogger(__file__)
 
     # start the server
     # ----------------
     # and keep watching
 
-    sandbox = root / "_sandbox"
-
     def custom_callback():
         print("Web server reloading!")
 
-    server = HttpWatcherServer(
-        sandbox,  # serve files from the folder /path/to/html
+    server = httpwatcher.HttpWatcherServer(
+        project_dir / "build",  # serve files from the folder /path/to/html
         # watch_paths=[sandbox / "index.html"],  # watch these paths for changes
         on_reload=custom_callback,  # optionally specify a custom callback to be called just before the server reloads
         host="127.0.0.1",  # bind to host 127.0.0.1
@@ -58,10 +61,4 @@ def main(here, root):
         IOLoop.current().start()
     except KeyboardInterrupt:
         server.shutdown()
-
-
-if __name__ == "__main__":
-    here = pathlib.Path(__file__).resolve().parent
-    root = here / ".."
-
-    main(here, root)
+    pass

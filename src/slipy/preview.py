@@ -6,3 +6,15 @@ Show a live updating version of the presentation.
     in order to save on update time
 
 """
+
+import pathlib
+
+from . import utils
+
+
+def preview(folder):
+    project_dir = pathlib.Path(folder).absolute()
+
+    framework = utils.load_cfg(project_dir)["framework"]
+
+    utils.switch_framework(framework).view.preview(project_dir)

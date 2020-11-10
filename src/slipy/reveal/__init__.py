@@ -1,6 +1,7 @@
 from .. import utils
-from . import get
 from . import assets
+from . import get
+from . import view
 
 
 def set_initial_cfg(name):
@@ -15,7 +16,8 @@ def init(project_dir):
     get.get_reveal(project_dir)
 
 
-dev_files = [".presentation", ".reveal_dist"]
+dist_files = ".reveal_dist"
+dev_files = [".presentation"]
 
 
 def clean(folder):

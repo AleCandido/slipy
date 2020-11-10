@@ -92,9 +92,15 @@ def setup_package():
             "python-frontmatter",
             "lz4",
             "pygit2",
+            "httpwatcher",
+            "tornado<5",
         ],
         setup_requires=["wheel", "pygit2"],
-        entry_points={"console_scripts": ["slipy=slides_cli:run_slipy",],},
+        entry_points={
+            "console_scripts": [
+                "slipy=slides_cli:run_slipy",
+            ],
+        },
         python_requires=">=3.7",
     )
 
