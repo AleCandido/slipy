@@ -1,30 +1,17 @@
-import toml
-
-from slipy_assets import template_cfg
-
 from .. import utils
 from . import get
 from . import assets
 
 
 def set_initial_cfg(name):
-    presentation_cfg = template_cfg.copy()
-
     reveal_cfg = {}
     reveal_cfg["dist_dir"] = ".reveal_dist"
     reveal_cfg["plugins"] = ["math"]
 
-    presentation_cfg["reveal"] = reveal_cfg
-    presentation_cfg["title"] = name
-
-    return presentation_cfg
+    return reveal_cfg
 
 
-def init(name, project_dir):
-    cfg_path = project_dir / "presentation.toml"
-
-    with open(cfg_path, "w") as f:
-        toml.dump(set_initial_cfg(name), f)
+def init(project_dir):
     get.get_reveal(project_dir)
 
 

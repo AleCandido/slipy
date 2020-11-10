@@ -9,6 +9,13 @@ def load_cfg(project_dir="."):
     return toml.load(project_dir / "presentation.toml")
 
 
+def dump_cfg(presentation_cfg, project_dir="."):
+    project_dir = pathlib.Path(project_dir).absolute()
+
+    with open(project_dir / "presentation.toml", "w") as fd:
+        toml.dump(presentation_cfg, fd)
+
+
 def get_norm_title(project_dir="."):
     """
     Normalize title to be used as file name.

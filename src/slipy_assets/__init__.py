@@ -4,7 +4,6 @@ import importlib
 import shutil
 import distutils.dir_util
 
-import yaml
 import toml
 
 # import framewokrs
@@ -21,9 +20,7 @@ class Template:
         path = here / framework / "templates" / name
 
         self.template = path / "template.html"
-        self.structure_path = path / "structure.yaml"
-        with open(self.structure_path) as f:
-            self.structure = yaml.safe_load(f)
+        self.options = toml.load(path / "options.toml")
         self.examples = path / "examples"
 
         try:
@@ -38,8 +35,9 @@ class Template:
 
     def unpack(self, assets_dir):
         shutil.copy2(self.template, assets_dir)
-        shutil.copy2(self.structure_path, assets_dir)
-        distutils.dir_util.copy_tree(str(self.examples), str(assets_dir / ".."))
+        distutils.dir_util.copy_tree(
+            str(self.examples), str(assets_dir.parent.absolute())
+        )
 
 
 class Theme:
