@@ -2,7 +2,9 @@ import toml
 
 from slipy_assets import template_cfg
 
+from .. import utils
 from . import get
+from . import assets
 
 
 def set_initial_cfg(name):
@@ -10,6 +12,7 @@ def set_initial_cfg(name):
 
     reveal_cfg = {}
     reveal_cfg["dist_dir"] = ".reveal_dist"
+    reveal_cfg["plugins"] = ["math"]
 
     presentation_cfg["reveal"] = reveal_cfg
     presentation_cfg["title"] = name
@@ -23,3 +26,13 @@ def init(name, project_dir):
     with open(cfg_path, "w") as f:
         toml.dump(set_initial_cfg(name), f)
     get.get_reveal(project_dir)
+
+
+dev_files = [".presentation", ".reveal_dist"]
+
+
+def clean(folder):
+    """
+    Clean unneeded generated files
+    """
+    pass

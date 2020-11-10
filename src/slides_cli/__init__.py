@@ -6,6 +6,7 @@ from . import update
 from . import preview
 from . import build
 from . import view
+from . import export
 from . import inflate
 
 
@@ -13,21 +14,39 @@ parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers(help="subcommand help")
 
 # new
-new_p = subparsers.add_parser("new", help=new.help["."])
-new_p.add_argument("name", nargs=1)
-new_p.add_argument("-f", "--framework", default="reveal")
-new_p.add_argument("--pdf", help=new.help["pdf"])
-new_p.set_defaults(func=new.new)
+new.add_parser(subparsers)
 
 # init
-init_p = subparsers.add_parser("init", help=init.help["."])
-init_p.set_defaults(func=init.init)
+init.add_parser(subparsers)
 
-# init
-update_p = subparsers.add_parser("update", help=update.help["."])
-update_p.set_defaults(func=update.update)
+# update
+update.add_parser(subparsers)
+
+# preview
+preview.add_parser(subparsers)
+
+# build
+build.add_parser(subparsers)
+
+# view
+view.add_parser(subparsers)
+
+# export
+export.add_parser(subparsers)
+
+# inflate
+inflate.add_parser(subparsers)
 
 
 def run_slipy():
     args = parser.parse_args()
-    args.func(args)
+    try:
+        args.func(args)
+    except AttributeError as e:
+        if (
+            len(e.args) > 0
+            and e.args[0] == "'Namespace' object has no attribute 'func'"
+        ):
+            print(parser.format_help())
+        else:
+            raise

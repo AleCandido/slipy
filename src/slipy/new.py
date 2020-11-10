@@ -1,32 +1,28 @@
 import pathlib
 
-import toml
-
-from slipy_assets.reveal import Template, Theme
+from slipy_assets import Template, Theme
 
 from . import utils
-from . import reveal
 
 
 def new(name, framework):
     project_dir = pathlib.Path(name)
     project_dir.mkdir()
 
-    actions = {
-        "reveal": (lambda: reveal.init(name, project_dir)),
-        "beamer": (lambda: None),
-    }
-    utils.switch_framework(framework, actions)
+    utils.switch_framework(framework).init(name, project_dir)
 
 
 def checkout_assets(folder):
     project_dir = pathlib.Path(folder)
+
+    presentation_cfg = utils.load_cfg(project_dir)
+    framework = presentation_cfg["framework"]
+
     assets_dir = project_dir / ".presentation"
     assets_dir.mkdir(exist_ok=True)
-    presentation_cfg = toml.load(project_dir / "presentation.toml")
 
-    template = Template(presentation_cfg["template"]["name"])
+    template = Template(presentation_cfg["template"]["name"], framework)
     template.unpack(assets_dir)
 
-    theme = Theme(presentation_cfg["theme"]["name"])
+    theme = Theme(presentation_cfg["theme"]["name"], framework)
     theme.unpack(assets_dir)
