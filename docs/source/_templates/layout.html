@@ -1,0 +1,72 @@
+<!-- vim: set filetype=jinja:-->
+{% extends "!layout.html" %}
+
+<!-- navbarmenu  -->
+{% block navbarmenu %}
+    {#<div id="navbarMenu" class="navbar-menu">#}
+        {#<div class="navbar-end">#}
+            {#<a class="navbar-item" href="https://documatt.com">Documatt</a>#}
+            {#<a class="navbar-item"#}
+               {#href="https://snippets.documatt.com">Snippets</a>#}
+            {#<a class="navbar-item is-active" href="https://blog.documatt.com">Blog</a>#}
+        {#</div>#}
+    {#</div>#}
+{% endblock %}
+
+<!-- mastercover -->
+{% block mastercover %}
+{#<h1 class="title is-2 has-text-primary">#}
+  {#Techwriter at work <span class="has-text-weight-light">blog</span>.#}
+{#</h1>#}
+{#<h2 class="subtitle is-4">#}
+  {#Living and writing documentation at Documatt, small team of programmers that#}
+  {#<span class="has-text-primary">do write</span> documentation too.#}
+{#</h2>#}
+{% endblock %}
+
+{% block cover %}
+{% endblock %}
+
+
+<!-- coverrightcolumn -->
+{% block coverrightcolumn %}
+{#<a#}
+  {#href="https://twitter.com/documattcom?ref_src=twsrc%5Etfw"#}
+  {#class="twitter-follow-button"#}
+  {#data-show-count="false"#}
+  {#>Follow us</a#}
+{#>#}
+{#<script#}
+  {#async#}
+  {#src="https://platform.twitter.com/widgets.js"#}
+  {#charset="utf-8"#}
+{#></script>#}
+{% endblock %}
+
+<!-- footer -->
+{%- block footer %}
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered has-text-primary">
+                <a href="{{ url_root }}">
+                <img
+                        src="{{ pathto('_static/' + logo, 1) }}"
+                        alt="{{ _('Logo') }}" style="height: 2rem;"></a>
+                <p>{{ theme_motto }}</p>
+                <p>{{ copyright }}</p>
+            </div>
+        </div>
+    </footer>
+{%- endblock footer %}
+
+
+<!-- extrafooter -->
+{% block extrafooter %}
+{#<script#}
+  {#type="text/javascript"#}
+  {#src="https://cdn.jsdelivr.net/npm/cookie-bar/cookiebar-latest.min.js?theme=grey&tracking=1&thirdparty=1&always=1&hideDetailsBtn=1&showPolicyLink=1&privacyPage=https%3A%2F%2Fdocumatt.com%2Fabout%2Flegal%2Fprivacy%2F"#}
+{#></script>#}
+  <script>
+    document.getElementsByTagName("hr")[0].remove()
+  </script>
+{% endblock %}

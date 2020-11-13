@@ -1,9 +1,16 @@
-# Themes
-Original *reveal.js* themes and my custom ones.
+# css development
 
-## Offline build
-Since I would like to have a stable version of the style no live update will be
-applied to the css.
+The css is organized in two branches:
+- in the first one, *core*, the main css for *reveal* is defined
+- in the second one, *themes*, many themes are defined, to be used aside the
+    main one
 
-## New theme development
-In `develop` folder
+## Theme
+
+
+## Core
+In order to compile the core run:
+```shell
+sass reveal.scss
+```
+It will produce the *reveal.css* stylesheet.
