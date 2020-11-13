@@ -8,6 +8,7 @@ from . import build
 from . import view
 from . import export
 from . import inflate
+from . import tutorial
 
 
 parser = argparse.ArgumentParser()
@@ -36,6 +37,9 @@ export.add_parser(subparsers)
 
 # inflate
 inflate.add_parser(subparsers)
+
+# tutorial
+tutorial.add_parser(subparsers)
 
 
 def run_slipy():

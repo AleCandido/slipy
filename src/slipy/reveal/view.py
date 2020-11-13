@@ -1,4 +1,5 @@
 import pathlib
+import shutil
 import logging
 import errno
 import socket
@@ -43,7 +44,12 @@ def preview(folder, rebuild=True):
             def on_any_event(self, event):
                 print("\tBUILD WATCHER")
                 print("\t", event.event_type, event.src_path)
-                build.build(project_dir)
+                src_path = pathlib.Path(event.src_path)
+                if src_path.parent.name == "assets":
+                    print("\tASSETS")
+                    shutil.copy2(str(src_path), str(project_dir / "build" / "assets"))
+                else:
+                    build.build(project_dir)
 
         build_handler = BuildHandler()
         build_observer = watchdog.observers.Observer()
