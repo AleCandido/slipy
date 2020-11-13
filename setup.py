@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 # write version on the fly - inspired by numpy
 MAJOR = 0
 MINOR = 1
-MICRO = 1
+MICRO = 2
 
 # Further release management
 # --------------------------
@@ -78,6 +78,7 @@ def setup_package():
         package_dir={"": "src"},
         packages=find_packages("src"),
         package_data={
+            "slipy": ["reveal/httpwatcher/build/*.js"],
             "slipy_assets": [
                 "presentation.toml",
                 "reveal/reveal.toml",
@@ -86,7 +87,7 @@ def setup_package():
                 "reveal/templates/**/**/*",
                 "reveal/themes/*",
                 "reveal/themes/**/*",
-            ]
+            ],
         },
         classifiers=[
             "Programming Language :: Python",
