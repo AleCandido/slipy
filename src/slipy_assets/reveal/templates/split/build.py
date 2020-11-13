@@ -21,7 +21,7 @@ def update_build_context(data, src_dir="src"):
             slides_paths.append(path)
 
     slides = []
-    for slide_path in slides_paths:
+    for slide_path in sorted(slides_paths):
         with open(slide_path) as f:
             metadata, content = frontmatter.parse(f.read())
 

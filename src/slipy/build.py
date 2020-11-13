@@ -12,9 +12,10 @@ from . import utils
 from .reveal import reload
 
 
-def build(folder, update_dist=False):
+def build(folder, update_dist=False, update_assets=False):
     project_dir = pathlib.Path(folder).absolute()
     build_dir = project_dir / "build"
+    src_dir = project_dir / "src"
 
     presentation_cfg = utils.load_cfg(project_dir)
     template_name = presentation_cfg["template"]["name"]
@@ -35,7 +36,7 @@ def build(folder, update_dist=False):
     data["reveal_dist"] = ".reveal_dist"
     data["theme"] = presentation_cfg["theme"]["name"]
 
-    template.update_build_context(data, project_dir / "src")
+    template.update_build_context(data, src_dir)
 
     # dump the result
     # ---------------
@@ -52,8 +53,15 @@ def build(folder, update_dist=False):
     with open(build_dir / "index.html", "w") as fd:
         fd.write(index_html)
 
-    if not pathlib.Path(reload.httpwatcher_script_url).exists():
+    if not (build_dir / pathlib.Path(reload.httpwatcher_script_url).name).exists():
         shutil.copy2(str(reload.httpwatcher_script_url), str(build_dir))
+
+    # provide assets
+    # --------------
+    assets_dir = src_dir / "assets"
+    if not (build_dir / "assets").exists() or update_assets:
+        shutil.rmtree(build_dir / "assets", ignore_errors=True)
+        shutil.copytree(str(assets_dir), str(build_dir / "assets"))
 
     # provide dist
     # ------------

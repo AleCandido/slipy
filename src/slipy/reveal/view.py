@@ -35,6 +35,8 @@ def preview(folder, rebuild=True):
     # ----------------------------
     # and keep watching
 
+    build.build(project_dir)
+
     if rebuild:
 
         class BuildHandler(watchdog.events.FileSystemEventHandler):
@@ -60,6 +62,7 @@ def preview(folder, rebuild=True):
 
             async def send_reload_signal():
                 async with websockets.connect(reload.websocket_uri) as websocket:
+                    await asyncio.sleep(1)
                     await websocket.send(json.dumps({"command": "reload"}))
 
             asyncio.run(send_reload_signal())
