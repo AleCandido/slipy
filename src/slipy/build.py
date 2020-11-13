@@ -9,6 +9,7 @@ from jinja2 import Environment, FileSystemLoader
 from slipy_assets import Template
 
 from . import utils
+from .reveal import reload
 
 
 def build(folder):
@@ -22,7 +23,6 @@ def build(folder):
 
     # prepare environment
     # -------------------
-
     if not (build_dir).exists():
         build_dir.mkdir()
 
@@ -30,7 +30,6 @@ def build(folder):
 
     # load data
     # ---------
-
     data = {}
 
     data["reveal_dist"] = ".reveal_dist"
@@ -40,13 +39,23 @@ def build(folder):
 
     # dump the result
     # ---------------
-
     j_template = env.get_template(".presentation/template.html")
     stream = j_template.stream(data)
     stream.dump(str(build_dir / "index.html"))
 
+    # add the liver reloading script
+    with open(build_dir / "index.html") as fd:
+        index_html = fd.read()
+
+    index_html = index_html.replace("</body>", reload.WEBSOCKET_JS_TEMPLATE)
+
+    with open(build_dir / "index.html", "w") as fd:
+        fd.write(index_html)
+
+    shutil.copy2(str(reload.httpwatcher_script_url), str(build_dir))
+
     # provide dist
     # ------------
     dist = project_dir / utils.switch_framework(framework).dist_files
-    shutil.rmtree(build_dir / dist.name, ignore_errors=False)
-    shutil.copytree(str(dist.absolute()), str(build_dir / dist.name))
+    shutil.rmtree(build_dir / dist.name, ignore_errors=True)
+    shutil.copytree(str(dist), str(build_dir / dist.name))

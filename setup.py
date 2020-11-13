@@ -90,10 +90,9 @@ def setup_package():
             "toml",
             "jinja2",
             "python-frontmatter",
-            "lz4",
             "pygit2",
-            "httpwatcher",
-            "tornado<5",
+            "requests",
+            "websockets",
         ],
         setup_requires=["wheel", "pygit2"],
         entry_points={

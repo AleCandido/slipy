@@ -17,9 +17,12 @@ import subprocess
 import sys
 import logging
 
+import requests
 import pygit2
 
 from slipy_assets.reveal import reveal_cfg
+
+from ..utils import archive
 
 logging.basicConfig(
     stream=sys.stdout,
@@ -51,12 +54,43 @@ def extract_essentials(folder, dest):
     logger.debug("Export dist: copied 'plugin'")
 
 
+def download_url(url, save_path, chunk_size=128):
+    r = requests.get(url, stream=True)
+    with open(save_path, "wb") as fd:
+        for chunk in r.iter_content(chunk_size=chunk_size):
+            fd.write(chunk)
+
+
+def get_reveal_release(project_dir, tmp_folder):
+    project_dir = pathlib.Path(project_dir).absolute()
+    zip_dir = project_dir / "dist.zip"
+
+    api_url = "https://api.github.com/repos/hakimel/reveal.js/releases/latest"
+    infos = requests.get(api_url).json()
+
+    download_url(infos["zipball_url"], zip_dir)
+
+    archive.uncompress(zip_dir, project_dir)
+
+    for el in project_dir.iterdir():
+        if el.is_dir():
+            release_dir = el.absolute()
+
+    shutil.move(release_dir, tmp_folder)
+    zip_dir.unlink()
+
+
+def get_reveal_git(project_dir, tmp_folder):
+    logger.info(f"Clone repo: from '{url}' into '{tmp_folder}'")
+    pygit2.clone_repository(url, tmp_folder)
+
+
 def get_reveal(project_dir):
-    project_path = pathlib.Path(project_dir)
+    project_dir = pathlib.Path(project_dir).absolute()
 
     url = reveal_cfg["repo"]["url"]
-    tmp_folder = project_path / "reveal_tmp"
-    dest = project_path / ".reveal_dist"
+    tmp_folder = project_dir / "reveal_tmp"
+    dest = project_dir / ".reveal_dist"
 
     shutil.rmtree(tmp_folder, ignore_errors=True)
 
@@ -71,8 +105,8 @@ def get_reveal(project_dir):
             logger.info(f"Removed: old reveal.js in '{tmp_folder}' removed")
             shutil.rmtree(dest)
 
-    logger.info(f"Clone repo: from '{url}' into '{tmp_folder}'")
-    pygit2.clone_repository(url, tmp_folder)
+    # get_reveal_git(project_dir, tmp_folder)
+    get_reveal_release(project_dir, tmp_folder)
 
     build_dist(tmp_folder)
     extract_essentials(tmp_folder, dest)
