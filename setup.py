@@ -4,6 +4,14 @@ import pathlib
 import pygit2
 from setuptools import setup, find_packages
 
+# write version on the fly - inspired by numpy
+MAJOR = 0
+MINOR = 1
+MICRO = 0
+
+# Further release management
+# --------------------------
+
 repo_path = pathlib.Path(__file__).absolute().parent
 repo = pygit2.Repository(repo_path)
 
@@ -13,11 +21,6 @@ tags_commit_sha = [
     for r in repo.references
     if "/tags/" in r
 ]
-
-# write version on the fly - inspired by numpy
-MAJOR = 0
-MINOR = 0
-MICRO = 0
 ISRELEASED = "main" in repo.head.name or repo.head.target in tags_commit_sha
 SHORT_VERSION = "%d.%d" % (MAJOR, MINOR)
 VERSION = "%d.%d.%d" % (MAJOR, MINOR, MICRO)
@@ -50,6 +53,10 @@ is_released = %(isreleased)s
         )
     finally:
         a.close()
+
+
+# Actual setup
+# ------------
 
 
 def setup_package():
