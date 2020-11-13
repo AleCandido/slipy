@@ -6,13 +6,13 @@ import frontmatter
 from slipy_assets import Template
 
 
-def update_build_context(data, project_dir="."):
+def update_build_context(data, src_dir="src"):
     class Slide:
         def __init__(self, metadata, content):
             self.metadata = metadata
             self.content = content
 
-    slides_dir = pathlib.Path(project_dir)
+    slides_dir = pathlib.Path(src_dir)
     slides_pattern = re.compile("\d*\.(html|md)")
 
     slides_paths = []

@@ -35,9 +35,10 @@ class Template:
 
     def unpack(self, assets_dir):
         shutil.copy2(self.template, assets_dir)
-        distutils.dir_util.copy_tree(
-            str(self.examples), str(assets_dir.parent.absolute())
-        )
+        src_dir = assets_dir.parent.absolute() / "src"
+        # unpack examples only if src does not exist or is empty
+        if not src_dir.exists() or len(list(src_dir.iterdir())) == 0:
+            distutils.dir_util.copy_tree(str(self.examples), str(src_dir))
 
 
 class Theme:

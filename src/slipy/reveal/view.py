@@ -11,6 +11,7 @@ import websockets
 import watchdog.events, watchdog.observers
 
 from . import reload
+from .. import build
 
 # from . import build
 
@@ -38,14 +39,13 @@ def preview(folder, rebuild=True):
 
         class BuildHandler(watchdog.events.FileSystemEventHandler):
             def on_any_event(self, event):
-                print("BUILD WATCHER")
-                print(event.event_type, event.src_path)
+                print("\tBUILD WATCHER")
+                print("\t", event.event_type, event.src_path)
+                build.build(project_dir)
 
-        build_event_handler = BuildHandler()
+        build_handler = BuildHandler()
         build_observer = watchdog.observers.Observer()
-        build_observer.schedule(
-            build_event_handler, path=project_dir / "1.html", recursive=False
-        )
+        build_observer.schedule(build_handler, path=project_dir / "src", recursive=True)
         build_observer.start()
 
     # start the server
@@ -55,8 +55,8 @@ def preview(folder, rebuild=True):
     class ViewHandler(watchdog.events.FileSystemEventHandler):
         # async def on_any_event(self, event):
         def on_any_event(self, event):
-            print("VIEW WATCHER")
-            print(event.event_type, event.src_path)
+            print("\tVIEW WATCHER")
+            print("\t", event.event_type, event.src_path)
 
             async def send_reload_signal():
                 async with websockets.connect(reload.websocket_uri) as websocket:
@@ -64,11 +64,9 @@ def preview(folder, rebuild=True):
 
             asyncio.run(send_reload_signal())
 
-    view_event_handler = ViewHandler()
+    view_handler = ViewHandler()
     view_observer = watchdog.observers.Observer()
-    view_observer.schedule(
-        view_event_handler, path=project_dir / "build", recursive=True
-    )
+    view_observer.schedule(view_handler, path=project_dir / "build", recursive=True)
     view_observer.start()
 
     # set server
