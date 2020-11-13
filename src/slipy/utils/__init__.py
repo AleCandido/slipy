@@ -3,31 +3,53 @@ import importlib
 
 import toml
 
-
-def load_cfg(project_dir="."):
-    project_dir = pathlib.Path(project_dir).absolute()
-    return toml.load(project_dir / "presentation.toml")
+# slipy project identification
+# ----------------------------
 
 
-def dump_cfg(presentation_cfg, project_dir="."):
-    project_dir = pathlib.Path(project_dir).absolute()
+def find_project_dir(folder):
+    path = pathlib.Path(folder).absolute()
 
-    with open(project_dir / "presentation.toml", "w") as fd:
-        toml.dump(presentation_cfg, fd)
+    for project_dir in [path] + list(path.parents):
+        if (project_dir / "presentation.toml").exists():
+            return project_dir
 
-
-def get_norm_title(project_dir="."):
-    """
-    Normalize title to be used as file name.
-    """
-    presentation_cfg = load_cfg(project_dir)
-    return presentation_cfg["title"].lower().replace(" ", "_")
+    raise ValueError(f"'{folder}' is not inside any 'slipy' project")
 
 
 def check_slipy_project(project_dir="."):
     project_dir = pathlib.Path(project_dir).absolute()
     if not (project_dir / "presentation.toml").exists():
         raise RuntimeError(f"'{project_dir}' is not a slipy project")
+
+
+# cfg management
+# --------------
+
+
+def load_cfg(folder="."):
+    project_dir = find_project_dir(folder)
+    return toml.load(project_dir / "presentation.toml")
+
+
+def dump_cfg(presentation_cfg, folder="."):
+    project_dir = find_project_dir(folder)
+
+    with open(project_dir / "presentation.toml", "w") as fd:
+        toml.dump(presentation_cfg, fd)
+
+
+# other utilities
+# ---------------
+
+
+def get_norm_title(folder="."):
+    """
+    Normalize title to be used as file name.
+    """
+    project_dir = find_project_dir(folder)
+    presentation_cfg = load_cfg(project_dir)
+    return presentation_cfg["title"].lower().replace(" ", "_")
 
 
 def switch_framework(framework):

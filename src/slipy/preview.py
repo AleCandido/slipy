@@ -13,7 +13,7 @@ from . import utils
 
 
 def preview(folder):
-    project_dir = pathlib.Path(folder).absolute()
+    project_dir = utils.find_project_dir(folder)
 
     framework = utils.load_cfg(project_dir)["framework"]
 

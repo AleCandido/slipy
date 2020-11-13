@@ -70,11 +70,11 @@ def setup_package():
         name="slipy",
         version=VERSION,
         description="slides utility",
-        long_description="",  # long_description,
+        long_description=long_description,
         long_description_content_type="text/markdown",
         author="A.Candido",
         author_email="candido.ale@gmail.com",
-        url="https://github.com/AleCandido/libmake.py",
+        url="https://github.com/AleCandido/slipy",
         package_dir={"": "src"},
         packages=find_packages("src"),
         package_data={

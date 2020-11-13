@@ -13,7 +13,7 @@ from .reveal import reload
 
 
 def build(folder, update_dist=False, update_assets=False):
-    project_dir = pathlib.Path(folder).absolute()
+    project_dir = utils.find_project_dir(folder)
     build_dir = project_dir / "build"
     src_dir = project_dir / "src"
 

@@ -24,7 +24,7 @@ def new(name, framework):
 
 
 def checkout_assets(folder):
-    project_dir = pathlib.Path(folder)
+    project_dir = utils.find_project_dir(folder)
 
     presentation_cfg = utils.load_cfg(project_dir)
     framework = presentation_cfg["framework"]
