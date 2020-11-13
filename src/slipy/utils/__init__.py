@@ -27,13 +27,13 @@ def check_slipy_project(project_dir="."):
 # --------------
 
 
-def load_cfg(folder="."):
-    project_dir = find_project_dir(folder)
+def load_cfg(project_dir):
+    project_dir = pathlib.Path(project_dir)
     return toml.load(project_dir / "presentation.toml")
 
 
 def dump_cfg(presentation_cfg, folder="."):
-    project_dir = find_project_dir(folder)
+    project_dir = pathlib.Path(project_dir)
 
     with open(project_dir / "presentation.toml", "w") as fd:
         toml.dump(presentation_cfg, fd)
