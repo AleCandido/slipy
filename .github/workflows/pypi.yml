@@ -22,9 +22,16 @@ jobs:
         uses: actions/setup-python@master
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Set up Node 🧶
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: "12"
       - name: Install package
         run: |
           pip install -e .
+          cd src/slipy/reveal/httpwatcher
+          yarn
+          yarn build
       - name: Package the distribution
         run: |
           # package the pure python wheel
