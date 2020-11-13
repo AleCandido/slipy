@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 # write version on the fly - inspired by numpy
 MAJOR = 0
 MINOR = 1
-MICRO = 2
+MICRO = 3
 
 # Further release management
 # --------------------------
@@ -100,6 +100,7 @@ def setup_package():
             "pygit2",  # TODO: to be removed
             "requests",
             "websockets",
+            "watchdog",
             "rich",
         ],
         setup_requires=["wheel", "pygit2"],
