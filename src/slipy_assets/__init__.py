@@ -43,6 +43,13 @@ class Template:
             distutils.dir_util.copy_tree(str(self.examples), str(src_dir))
 
 
+class Slide:
+    def __init__(self, metadata, content, force_format=""):
+        self.metadata = metadata
+        self.content = content
+        self.force_format = force_format
+
+
 class Theme:
     def __init__(self, name, framework):
         path = here / framework / "themes"

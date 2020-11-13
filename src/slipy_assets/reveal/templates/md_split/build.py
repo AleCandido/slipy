@@ -20,7 +20,16 @@ def update_build_context(data, src_dir="src"):
         with open(slide_path) as f:
             metadata, content = frontmatter.parse(f.read())
 
-        slide = Slide(metadata, content)
+        try:
+            force_html = metadata["force_html"]
+            del metadata["force_html"]
+
+            if force_html:
+                force_format = "html"
+        except KeyError:
+            force_format = ""
+
+        slide = Slide(metadata, content, force_format=force_format)
         slides.append(slide)
 
     data["slides"] = slides
