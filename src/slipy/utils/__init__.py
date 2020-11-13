@@ -32,7 +32,7 @@ def load_cfg(project_dir):
     return toml.load(project_dir / "presentation.toml")
 
 
-def dump_cfg(presentation_cfg, folder="."):
+def dump_cfg(presentation_cfg, project_dir):
     project_dir = pathlib.Path(project_dir)
 
     with open(project_dir / "presentation.toml", "w") as fd:
