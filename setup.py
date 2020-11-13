@@ -100,6 +100,7 @@ def setup_package():
             "pygit2",  # TODO: to be removed
             "requests",
             "websockets",
+            "watchdog",
             "rich",
         ],
         setup_requires=["wheel", "pygit2"],
