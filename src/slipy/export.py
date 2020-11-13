@@ -30,31 +30,27 @@ def export(folder):
 
 
 def collect(folder, title, framework):
-    folder = pathlib.Path(folder)
-    collect_dir = folder / title
-    build_dir = folder / "build"
+    project_dir = utils.find_project_dir(folder)
+    collect_dir = project_dir / title
+    build_dir = project_dir / "build"
     if not build_dir.exists():
         build_dir.mkdir()
 
     logger.debug("Create 'src.tmp'")
-    collect_dir.mkdir(exist_ok=True)
-    src_dir = folder / "src.tmp"
-    src_dir.mkdir()
+    tmp_dir = project_dir / "src.tmp"
+    tmp_dir.mkdir()
 
     dev_files = utils.switch_framework(framework).dev_files
 
-    gen_assets = [p.name for p in [src_dir, collect_dir, build_dir]]
-    gen_assets.extend(dev_files)
-    for f in folder.iterdir():
-        if f.name not in gen_assets:
+    generated_files = [p.name for p in [tmp_dir, build_dir]]
+    for f in project_dir.iterdir():
+        if f.name not in generated_files:
             if f.is_dir():
-                shutil.copytree(str(f.absolute()), src_dir)
+                shutil.copytree(str(f.absolute()), tmp_dir / f.name)
             else:
-                shutil.copy2(str(f.absolute()), src_dir)
+                shutil.copy2(str(f.absolute()), tmp_dir)
 
-    shutil.move(str(src_dir.rename("src")), collect_dir)
-    for fd in dev_files:
-        shutil.copytree(str(folder / fd), collect_dir / fd)
+    tmp_dir.rename(collect_dir)
 
     archive = compress(collect_dir)
     shutil.rmtree(collect_dir)

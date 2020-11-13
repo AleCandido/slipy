@@ -4,7 +4,7 @@ from . import utils
 
 
 def update(folder):
-    project_dir = pathlib.Path(folder)
+    project_dir = utils.find_project_dir(folder)
     assets_dir = project_dir / ".presentation"
 
     presentation_cfg = utils.load_cfg(project_dir)

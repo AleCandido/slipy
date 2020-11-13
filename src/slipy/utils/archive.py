@@ -2,23 +2,6 @@ import os
 import pathlib
 import shutil
 
-import lz4
-
-# Register LZ4 methods
-# --------------------
-
-
-def _lz4_archive(base_name, base_dir, **kwargs):
-    pass
-
-
-def _lz4_unpack(archive_path, dest_dir, **kwargs):
-    pass
-
-
-shutil.register_archive_format("lz4", _lz4_archive, description="lz4 file")
-shutil.register_unpack_format("lz4", ".lz4", _lz4_unpack, description="lz4 file")
-
 # Higher level utilities
 
 
