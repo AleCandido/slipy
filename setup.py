@@ -86,13 +86,13 @@ def setup_package():
             "Programming Language :: Python :: 3",
         ],
         install_requires=[
-            "pyyaml",
             "toml",
             "jinja2",
             "python-frontmatter",
-            "pygit2",
+            "pygit2",  # TODO: to be removed
             "requests",
             "websockets",
+            "rich",
         ],
         setup_requires=["wheel", "pygit2"],
         entry_points={

@@ -1,4 +1,5 @@
 import pathlib
+import re
 
 from rich.console import Console
 from rich.markdown import Markdown
@@ -8,7 +9,16 @@ console = Console()
 
 
 def display_tutorial(name):
-    path = (tutorial_dir / (name + ".md")).absolute()
+    paths = [
+        t for t in tutorial_dir.iterdir() if re.fullmatch(f"\d*\.{name}.md", t.name)
+    ]
+    if len(paths) == 1:
+        path = paths[0]
+    elif len(paths) == 0:
+        raise FileNotFoundError(f"tutorial '{name}' not available")
+    else:
+        raise RuntimeError(f"Too many tutorials found matching '\d*\.{name}.md'")
+
     with open(path) as fd:
         tutorial_text = fd.read()
 
