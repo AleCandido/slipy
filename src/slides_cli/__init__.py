@@ -1,5 +1,6 @@
 import argparse
 
+from . import main
 from . import new
 from . import init
 from . import update
@@ -12,7 +13,10 @@ from . import tutorial
 
 
 parser = argparse.ArgumentParser()
-subparsers = parser.add_subparsers(help="subcommand help")
+subparsers = parser.add_subparsers(help=main.help["subparsers"])
+
+# top-level
+main.add_options(parser)
 
 # new
 new.add_parser(subparsers)
@@ -47,10 +51,4 @@ def run_slipy():
     try:
         args.func(args)
     except AttributeError as e:
-        if (
-            len(e.args) > 0
-            and e.args[0] == "'Namespace' object has no attribute 'func'"
-        ):
-            print(parser.format_help())
-        else:
-            raise
+        main.run(parser, args, e)
