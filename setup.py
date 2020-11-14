@@ -82,11 +82,11 @@ def setup_package():
             "slipy_assets": [
                 "presentation.toml",
                 "reveal/reveal.toml",
-                "reveal/templates/*",
-                "reveal/templates/**/*",
-                "reveal/templates/**/**/*",
-                "reveal/themes/*",
-                "reveal/themes/**/*",
+                "reveal/templates/*",  # template README.md, ...
+                "reveal/templates/**/*",  # specific template files: template.html, ...
+                "reveal/templates/**/**/*",  # specific template examples: 1.html, ...
+                "reveal/templates/**/**/**/*",  # template examples' assets: cover.png, ...,
+                "reveal/themes/*",  # themes: white.css, black.css, ...
             ],
         },
         classifiers=[
