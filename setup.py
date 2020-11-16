@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 # write version on the fly - inspired by numpy
 MAJOR = 0
 MINOR = 1
-MICRO = 4
+MICRO = 5
 
 # Further release management
 # --------------------------
@@ -104,11 +104,7 @@ def setup_package():
             "rich",
         ],
         setup_requires=["wheel", "pygit2"],
-        entry_points={
-            "console_scripts": [
-                "slipy=slides_cli:run_slipy",
-            ],
-        },
+        entry_points={"console_scripts": ["slipy=slides_cli:run_slipy",],},
         python_requires=">=3.7",
     )
 
