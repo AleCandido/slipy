@@ -6,8 +6,8 @@ from setuptools import setup, find_packages
 
 # write version on the fly - inspired by numpy
 MAJOR = 0
-MINOR = 1
-MICRO = 8
+MINOR = 2
+MICRO = 0
 
 # Further release management
 # --------------------------
@@ -88,6 +88,7 @@ def setup_package():
                 "reveal/templates/**/**/**/*",  # template examples' assets: cover.png, ...,
                 "reveal/themes/*",  # themes: white.css, black.css, ...
             ],
+            "slides_cli": ["tutorials/*.md"],
         },
         classifiers=[
             "Programming Language :: Python",

@@ -8,11 +8,11 @@ from . import utils
 from . import update
 
 
-def new(name, framework):
+def new(name, framework, framework_rebuild):
     project_dir = pathlib.Path(name)
     project_dir.mkdir()
 
-    utils.switch_framework(framework).init(project_dir)
+    utils.switch_framework(framework).init(project_dir, framework_rebuild)
 
     presentation_cfg = template_cfg.copy()
     presentation_cfg["title"] = name
@@ -21,6 +21,7 @@ def new(name, framework):
     )
 
     utils.dump_cfg(presentation_cfg, project_dir)
+    utils.switch_framework(framework).dump_gitignore(project_dir)
 
 
 def checkout_assets(folder):
