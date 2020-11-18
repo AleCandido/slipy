@@ -85,7 +85,7 @@ def get_reveal_git(project_dir, tmp_folder):
     pygit2.clone_repository(url, tmp_folder)
 
 
-def get_reveal(project_dir):
+def get_reveal(project_dir, force_rebuild):
     project_dir = pathlib.Path(project_dir).absolute()
 
     url = reveal_cfg["repo"]["url"]
@@ -108,7 +108,8 @@ def get_reveal(project_dir):
     # get_reveal_git(project_dir, tmp_folder)
     get_reveal_release(project_dir, tmp_folder)
 
-    build_dist(tmp_folder)
+    if force_rebuild:
+        build_dist(tmp_folder)
     extract_essentials(tmp_folder, dest)
 
     shutil.rmtree(tmp_folder)
