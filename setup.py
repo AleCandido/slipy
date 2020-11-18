@@ -88,6 +88,7 @@ def setup_package():
                 "reveal/templates/**/**/**/*",  # template examples' assets: cover.png, ...,
                 "reveal/themes/*",  # themes: white.css, black.css, ...
             ],
+            "slides_cli": ["tutorials/*.md"],
         },
         classifiers=[
             "Programming Language :: Python",
