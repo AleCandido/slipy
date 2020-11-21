@@ -30,7 +30,14 @@ def update_build_context(data, src_dir="src"):
                         raise RuntimeError("Only a single header file is allowed")
 
     slides = []
-    for slide_path in sorted(slides_paths):
+
+    def slide_priority(path):
+        try:
+            return int(path.stem)
+        except ValueError:
+            return path
+
+    for slide_path in sorted(slides_paths, key=slide_priority):
         with open(slide_path) as f:
             metadata, content = frontmatter.parse(f.read())
 
