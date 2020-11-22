@@ -1,5 +1,3 @@
-import inspect
-
 from .. import utils
 from . import assets
 from . import get
@@ -14,16 +12,10 @@ def set_initial_cfg(name):
     return reveal_cfg
 
 
-def dump_gitignore(project_dir):
-    gitignore = inspect.cleandoc(
-        """
-        build
-        .reveal_dist
-        .presentation
-        """
-    )
-    with open(project_dir / ".gitignore", "w") as fd:
-        fd.write(gitignore)
+gitignore = """
+# reveal.js
+.reveal_dist
+"""
 
 
 def init(project_dir, force_rebuild=False):

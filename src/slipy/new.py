@@ -1,4 +1,5 @@
 import pathlib
+import inspect
 
 import toml
 
@@ -6,6 +7,20 @@ from slipy_assets import template_cfg, Template, Theme
 
 from . import utils
 from . import update
+
+
+def dump_gitignore(project_dir, extras=None):
+    gitignore = inspect.cleandoc(
+        """
+        build
+        .presentation
+        """
+    )
+    if extras is not None:
+        gitignore += f"\n{extras}"
+
+    with open(project_dir / ".gitignore", "w") as fd:
+        fd.write(gitignore)
 
 
 def new(name, framework, framework_rebuild):
@@ -21,7 +36,7 @@ def new(name, framework, framework_rebuild):
     )
 
     utils.dump_cfg(presentation_cfg, project_dir)
-    utils.switch_framework(framework).dump_gitignore(project_dir)
+    dump_gitignore(project_dir, extras=utils.switch_framework(framework).gitignore)
 
 
 def checkout_assets(folder):
