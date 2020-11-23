@@ -33,8 +33,7 @@ def collect(folder, title, framework):
     project_dir = utils.find_project_dir(folder)
     collect_dir = project_dir / title
     build_dir = project_dir / "build"
-    if not build_dir.exists():
-        build_dir.mkdir()
+    export_dir = project_dir / title
 
     logger.debug("Create 'src.tmp'")
     tmp_dir = project_dir / "src.tmp"
@@ -42,7 +41,7 @@ def collect(folder, title, framework):
 
     dev_files = utils.switch_framework(framework).dev_files
 
-    generated_files = [p.name for p in [tmp_dir, build_dir]]
+    generated_files = [p.name for p in [tmp_dir, build_dir, export_dir]]
     for f in project_dir.iterdir():
         if f.name not in generated_files:
             if f.is_dir():
@@ -53,10 +52,15 @@ def collect(folder, title, framework):
     tmp_dir.rename(collect_dir)
 
     archive = compress(collect_dir)
-    shutil.rmtree(collect_dir)
+    if archive is not None:
+        shutil.rmtree(collect_dir)
 
-    archive = pathlib.Path(archive)
-    if (build_dir / archive.name).exists():
-        (build_dir / archive.name).unlink()
+        archive = pathlib.Path(archive)
+        export_dir.mkdir()
 
-    shutil.move(str(archive), build_dir)
+        shutil.move(str(archive), export_dir)
+        shutil.copy2(build_dir / "index.html", export_dir)
+        shutil.copytree(build_dir / "assets", export_dir / "assets")
+        shutil.copytree(build_dir / ".reveal_dist", export_dir / ".reveal_dist")
+    else:
+        print("Old archived detected, nothing done")
