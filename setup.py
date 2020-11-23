@@ -6,8 +6,8 @@ from setuptools import setup, find_packages
 
 # write version on the fly - inspired by numpy
 MAJOR = 0
-MINOR = 1
-MICRO = 6
+MINOR = 2
+MICRO = 1
 
 # Further release management
 # --------------------------
@@ -88,6 +88,7 @@ def setup_package():
                 "reveal/templates/**/**/**/*",  # template examples' assets: cover.png, ...,
                 "reveal/themes/*",  # themes: white.css, black.css, ...
             ],
+            "slides_cli": ["tutorials/*.md"],
         },
         classifiers=[
             "Programming Language :: Python",
@@ -104,7 +105,11 @@ def setup_package():
             "rich",
         ],
         setup_requires=["wheel", "pygit2"],
-        entry_points={"console_scripts": ["slipy=slides_cli:run_slipy",],},
+        entry_points={
+            "console_scripts": [
+                "slipy=slides_cli:run_slipy",
+            ],
+        },
         python_requires=">=3.7",
     )
 

@@ -12,9 +12,16 @@ def set_initial_cfg(name):
     return reveal_cfg
 
 
-def init(project_dir, force=False):
+gitignore = """
+# reveal.js
+.reveal_dist
+"""
+
+
+def init(project_dir, force_rebuild=False, force_download=False):
+    force = force_rebuild or force_download
     if not (project_dir / ".reveal_dist").exists() or force:
-        get.get_reveal(project_dir)
+        get.get_reveal(project_dir, force_rebuild)
 
 
 dist_files = ".reveal_dist"

@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
 
     <title>reveal.js</title>
 
-    <link rel="stylesheet" href="{{ reveal_dist }}/dist/reset.css">
-    <link rel="stylesheet" href="{{ reveal_dist }}/dist/reveal.css">
-    <link rel="stylesheet" href="{{ reveal_dist }}/dist/theme/{{ theme }}.css" id="theme">
+    <link rel="stylesheet" href="{{ reveal_dist }}/dist/reset.css" />
+    <link rel="stylesheet" href="{{ reveal_dist }}/dist/reveal.css" />
+    <link
+      rel="stylesheet"
+      href="{{ reveal_dist }}/dist/theme/{{ theme }}.css"
+      id="theme"
+    />
 
     <!-- Theme used for syntax highlighted code -->
-    <link rel="stylesheet" href="{{ reveal_dist }}/plugin/highlight/monokai.css" id="highlight-theme">
+    <link
+      rel="stylesheet"
+      href="{{ reveal_dist }}/plugin/highlight/monokai.css"
+      id="highlight-theme"
+    />
 
     <!--User defined header-->
     {{ head|indent(4) }}
@@ -20,7 +31,8 @@
     <div class="reveal">
       <div class="slides">
         {% for slide in slides %}
-        <section{% for k, v in slide.metadata.items() %} {{ k }}="{{ v }}"{% endfor %}>
+        <!-- prettier-ignore -->
+        <section {% for k, v in slide.metadata.items() %} {{ k }}="{{ v }}"{% endfor %}>
           {{ slide.content|indent(10) }}
         </section>
         {% endfor %}
@@ -40,8 +52,11 @@
         hash: true,
 
         // Learn about plugins: https://revealjs.com/plugins/
-        plugins: [ RevealMath, RevealMarkdown, RevealHighlight, RevealNotes ]
+        plugins: [RevealMath, RevealMarkdown, RevealHighlight, RevealNotes],
       });
     </script>
+
+    <!--User defined footer-->
+    {{ foot|indent(4) }}
   </body>
 </html>

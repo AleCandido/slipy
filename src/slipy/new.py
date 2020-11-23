@@ -1,6 +1,7 @@
 import sys
 import pathlib
 import logging
+import inspect
 
 import toml
 
@@ -18,11 +19,25 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def new(name, framework):
+def dump_gitignore(project_dir, extras=None):
+    gitignore = inspect.cleandoc(
+        """
+        build
+        .presentation
+        """
+    )
+    if extras is not None:
+        gitignore += f"\n{extras}"
+
+    with open(project_dir / ".gitignore", "w") as fd:
+        fd.write(gitignore)
+
+
+def new(name, framework, framework_rebuild):
     project_dir = pathlib.Path(name)
     project_dir.mkdir()
 
-    utils.switch_framework(framework).init(project_dir)
+    utils.switch_framework(framework).init(project_dir, framework_rebuild)
 
     presentation_cfg = template_cfg.copy()
     presentation_cfg["title"] = name
@@ -31,6 +46,7 @@ def new(name, framework):
     )
 
     utils.dump_cfg(presentation_cfg, project_dir)
+    dump_gitignore(project_dir, extras=utils.switch_framework(framework).gitignore)
 
 
 def init(folder):

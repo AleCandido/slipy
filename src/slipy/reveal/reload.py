@@ -5,7 +5,7 @@ port = 1234
 watcher_interval = 1.0
 recursive = True
 
-httpwatcher_script = "httpwatcher.min.js"
+httpwatcher_script = "httpwatcher.bundle.js"
 websocket_uri = f"ws://{host}:{port}/httpwatcher"
 httpwatcher_script_url = (
     pathlib.Path(__file__).parent.absolute()
