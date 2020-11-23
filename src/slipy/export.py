@@ -61,6 +61,6 @@ def collect(folder, title, framework):
         shutil.move(str(archive), export_dir)
         shutil.copy2(build_dir / "index.html", export_dir)
         shutil.copytree(build_dir / "assets", export_dir / "assets")
-        shutil.copytree(build_dir / ".reveal_dist", export_dir / ".reveal_dist")
+        shutil.copytree(build_dir / "reveal", export_dir / "reveal")
     else:
         print("Old archived detected, nothing done")
