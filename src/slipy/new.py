@@ -1,4 +1,6 @@
+import sys
 import pathlib
+import logging
 
 import toml
 
@@ -6,6 +8,14 @@ from slipy_assets import template_cfg, Template, Theme
 
 from . import utils
 from . import update
+
+
+logging.basicConfig(
+    stream=sys.stdout,
+    level=logging.DEBUG,
+    format="[%(levelname)s]: %(message)s (%(name)s)",
+)
+logger = logging.getLogger(__name__)
 
 
 def new(name, framework):
@@ -23,11 +33,13 @@ def new(name, framework):
     utils.dump_cfg(presentation_cfg, project_dir)
 
 
-def checkout_assets(folder):
+def init(folder):
     project_dir = utils.find_project_dir(folder)
 
     presentation_cfg = utils.load_cfg(project_dir)
     framework = presentation_cfg["framework"]
+
+    utils.switch_framework(framework).init(project_dir)
 
     assets_dir = project_dir / ".presentation"
     assets_dir.mkdir(exist_ok=True)

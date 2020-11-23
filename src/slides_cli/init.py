@@ -9,7 +9,7 @@ def add_parser(subparsers):
 
 
 def init(args):
-    slipy.new.checkout_assets(pathlib.Path(".").absolute())
+    slipy.new.init(pathlib.Path(".").absolute())
 
 
 help = {".": """Initialize project, populate assets"""}

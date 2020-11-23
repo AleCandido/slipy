@@ -12,8 +12,9 @@ def set_initial_cfg(name):
     return reveal_cfg
 
 
-def init(project_dir):
-    get.get_reveal(project_dir)
+def init(project_dir, force=False):
+    if not (project_dir / ".reveal_dist").exists() or force:
+        get.get_reveal(project_dir)
 
 
 dist_files = ".reveal_dist"

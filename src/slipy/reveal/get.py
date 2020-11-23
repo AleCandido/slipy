@@ -68,6 +68,7 @@ def get_reveal_release(project_dir, tmp_folder):
     api_url = "https://api.github.com/repos/hakimel/reveal.js/releases/latest"
     infos = requests.get(api_url).json()
 
+    logger.info(f"Downloading reveal dist from: '{infos['zipball_url']}'")
     download_url(infos["zipball_url"], zip_dir)
 
     archive.uncompress(zip_dir, project_dir)
