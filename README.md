@@ -1,5 +1,5 @@
-<div style="display: flex; justify-content: center">
-  <img src="docs/source/_static/logo.png" alt="logo" style="width: 500px">
-</div>
+<p align="center">
+  <img src="docs/source/_static/logo_writing.png" alt="logo" width="500px">
+</p>
 
 A python manager for slides frameworks.
