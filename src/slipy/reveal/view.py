@@ -7,12 +7,15 @@ import asyncio
 import signal
 import webbrowser
 import json
+import datetime
+import abc
 
 import websockets
 import watchdog.events, watchdog.observers
 
 from . import reload
 from .. import build
+from ..utils import log
 
 # from . import build
 
@@ -25,10 +28,19 @@ def view(folder):
 def preview(folder, rebuild=True):
     project_dir = pathlib.Path(folder).absolute()
 
+    # deactivate external loggers
+    # ---------------------------
+    ws_logger = logging.getLogger("websockets")
+    ws_logger.setLevel(logging.CRITICAL)
+    aio_logger = logging.getLogger("asyncio")
+    aio_logger.setLevel(logging.CRITICAL)
+    wd_logger = logging.getLogger("watchdog.observers.inotify_buffer")
+    wd_logger.setLevel(logging.CRITICAL)
+
     # init the logger
     # ---------------
 
-    logger = logging.getLogger(__file__)
+    logger = logging.getLogger(__name__)
 
     loop = asyncio.get_event_loop()
 
@@ -38,15 +50,35 @@ def preview(folder, rebuild=True):
 
     build.build(project_dir)
 
+    class PreviewHandler(watchdog.events.FileSystemEventHandler, abc.ABC):
+        def __init__(self, *args, **kwargs):
+            self.time = datetime.datetime.now()
+            super().__init__(*args, **kwargs)
+
+        @abc.abstractmethod
+        def handle_event(self, event):
+            pass
+
+        def on_any_event(self, event):
+            if event.is_directory or event.event_type == "closed":
+                return
+
+            if (datetime.datetime.now() - self.time) < datetime.timedelta(seconds=2):
+                self.handle_event(event)
+
+            self.time = datetime.datetime.now()
+
     if rebuild:
 
-        class BuildHandler(watchdog.events.FileSystemEventHandler):
-            def on_any_event(self, event):
-                print("\tBUILD WATCHER")
-                print("\t", event.event_type, event.src_path)
+        class BuildHandler(PreviewHandler):
+            def handle_event(self, event):
                 src_path = pathlib.Path(event.src_path)
+                log.logger.info(
+                    f"[green]BUILD <-[/] {event.event_type}: [i magenta]{src_path.relative_to(project_dir.parent)}[/]",
+                    extra={"markup": True},
+                )
                 if src_path.parent.name == "assets":
-                    print("\tASSETS")
+                    logger.info("ASSETS")
                     shutil.copy2(str(src_path), str(project_dir / "build" / "assets"))
                 else:
                     build.build(project_dir)
@@ -60,11 +92,15 @@ def preview(folder, rebuild=True):
     # ----------------
     # and keep watching
 
-    class ViewHandler(watchdog.events.FileSystemEventHandler):
-        # async def on_any_event(self, event):
-        def on_any_event(self, event):
-            print("\tVIEW WATCHER")
-            print("\t", event.event_type, event.src_path)
+    class ViewHandler(PreviewHandler):
+        time = datetime.datetime.now()
+
+        def handle_event(self, event):
+            src_path = pathlib.Path(event.src_path)
+            log.logger.info(
+                f"[green]VIEW update <-[/] {event.event_type}: [i magenta]{src_path.relative_to(project_dir.parent)}[/]",
+                extra={"markup": True},
+            )
 
             async def send_reload_signal():
                 async with websockets.connect(reload.websocket_uri) as websocket:
@@ -89,10 +125,10 @@ def preview(folder, rebuild=True):
     webbrowser.open(str(project_dir / "build" / "index.html"))
 
     def close(loop):
-        print(f"Finalazing...")
-        build_observer.stop()
+        logger.info(f"Closing preview mode...")
         if rebuild:
-            view_observer.stop()
+            build_observer.stop()
+        view_observer.stop()
         loop.stop()
 
     loop.add_signal_handler(signal.SIGINT, close, loop)
@@ -100,7 +136,7 @@ def preview(folder, rebuild=True):
     asyncio.get_event_loop().run_until_complete(start_server)
     loop.run_forever()
     loop.close()
-    print("Stop watching for updates.")
+    logger.info("Stop watching for updates.")
 
 
 def websocket_server(host, port):

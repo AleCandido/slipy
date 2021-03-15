@@ -24,11 +24,6 @@ from slipy_assets.reveal import reveal_cfg
 
 from ..utils import archive
 
-logging.basicConfig(
-    stream=sys.stdout,
-    level=logging.DEBUG,
-    format="[%(levelname)s]: %(message)s (%(name)s)",
-)
 logger = logging.getLogger(__name__)
 
 

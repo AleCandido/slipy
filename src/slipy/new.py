@@ -11,11 +11,6 @@ from . import utils
 from . import update
 
 
-logging.basicConfig(
-    stream=sys.stdout,
-    level=logging.DEBUG,
-    format="[%(levelname)s]: %(message)s (%(name)s)",
-)
 logger = logging.getLogger(__name__)
 
 

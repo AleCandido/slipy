@@ -34,6 +34,7 @@ def build(folder, update_dist=False, update_assets=False):
     data = {}
 
     data["reveal_dist"] = "reveal"
+    data["title"] = presentation_cfg["title"]
     data["theme"] = presentation_cfg["theme"]["name"]
 
     template.update_build_context(data, src_dir)

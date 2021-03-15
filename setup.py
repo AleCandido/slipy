@@ -86,6 +86,7 @@ def setup_package():
             "rich",
         ],
         setup_requires=["wheel", "pygit2"],
+        extras_require={"utils": ["pyperclip", "Pillow"]},
         entry_points={
             "console_scripts": [
                 "slipy=slides_cli:run_slipy",

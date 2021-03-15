@@ -11,10 +11,10 @@ pdf: $(patsubst %.svg,%.pdf,$(IMAGES))
 favicon: favicon-32x32.png favicon.pdf
 
 %.png: %.svg
-	inkscape $< --export-png $@ -w 1200
+	inkscape $< --export-type="png" --export-filename=$@ -w 1200
 
 %.pdf: %.svg
-	inkscape --file=$< --export-area-drawing --without-gui --export-pdf=$@
+	inkscape $< --export-area-drawing --export-type="pdf" --export-filename=$@
 
 favicon-32x32.png: favicon.svg
-	inkscape $< --export-png $@ -w 32
+	inkscape $< --export-type="png" --export-filename=$@ -w 32
