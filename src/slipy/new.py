@@ -45,6 +45,7 @@ def new(name, framework, framework_rebuild):
 
 
 def init(folder):
+    logger.info("Initializing project...")
     project_dir = utils.find_project_dir(folder)
 
     presentation_cfg = utils.load_cfg(project_dir)
@@ -52,7 +53,7 @@ def init(folder):
 
     utils.switch_framework(framework).init(project_dir)
 
-    assets_dir = project_dir / ".presentation"
+    assets_dir = project_dir / utils.assets_dir
     assets_dir.mkdir(exist_ok=True)
 
     update.update(project_dir)

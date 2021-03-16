@@ -1,26 +1,30 @@
 import pathlib
+import logging
 
 from . import utils
+
+logger = logging.getLogger(__name__)
 
 
 def update(folder):
     project_dir = utils.find_project_dir(folder)
-    assets_dir = project_dir / ".presentation"
 
     presentation_cfg = utils.load_cfg(project_dir)
-    template_options = update_template(assets_dir, presentation_cfg)
-    update_theme(assets_dir, presentation_cfg)
+    template_options = update_template(project_dir, presentation_cfg)
+    update_theme(project_dir, presentation_cfg)
 
     presentation_cfg = update_template_options(presentation_cfg, template_options)
 
     utils.dump_cfg(presentation_cfg, project_dir)
 
 
-def update_template(assets_dir, presentation_cfg):
+def update_template(project_dir, presentation_cfg):
     framework = presentation_cfg["framework"]
     name = presentation_cfg["template"]["name"]
 
-    return utils.switch_framework(framework).assets.update_template(name, assets_dir)
+    logger.info(f"Update [red]Template[/] [i magenta]{name}[/]", extra={"markup": True})
+
+    return utils.switch_framework(framework).assets.update_template(name, project_dir)
 
 
 def update_template_options(presentation_cfg, template_options):
@@ -47,8 +51,11 @@ def update_template_options(presentation_cfg, template_options):
     return presentation_cfg
 
 
-def update_theme(assets_dir, presentation_cfg):
+def update_theme(project_dir, presentation_cfg):
     framework = presentation_cfg["framework"]
     name = presentation_cfg["theme"]["name"]
+    dist_dir = project_dir / presentation_cfg[framework]["dist_dir"]
 
-    utils.switch_framework(framework).assets.update_theme(name, assets_dir)
+    logger.info(f"Update [red]Theme[/] [i magenta]{name}[/]", extra={"markup": True})
+
+    utils.switch_framework(framework).assets.update_theme(name, project_dir, dist_dir)

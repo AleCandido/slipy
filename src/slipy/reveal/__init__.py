@@ -1,3 +1,5 @@
+import pathlib
+
 from .. import utils
 from . import assets
 from . import get
@@ -26,6 +28,7 @@ def init(project_dir, force_rebuild=False, force_download=False):
 
 dist_files = ".reveal_dist"
 dev_files = [".presentation"]
+theme_dir = str(pathlib.Path(dist_files) / "dist" / "theme")
 
 
 def clean(folder):
@@ -33,3 +36,11 @@ def clean(folder):
     Clean unneeded generated files
     """
     pass
+
+
+def theme_path(name, project_dir, slipy_assets):
+    theme_dir = slipy_assets / "reveal" / "themes"
+    if (theme_dir / (name + ".css")).exists():
+        return theme_dir / (name + ".css")
+    else:
+        return project_dir / dist_files / "dist" / "theme" / (name + ".css")
