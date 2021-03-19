@@ -7,8 +7,8 @@ from setuptools import setup, find_packages
 
 # write version on the fly - inspired by numpy
 MAJOR = 0
-MINOR = 2
-MICRO = 3
+MINOR = 3
+MICRO = 0
 
 repo_path = pathlib.Path(__file__).absolute().parent
 
