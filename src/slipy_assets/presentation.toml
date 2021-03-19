@@ -2,7 +2,7 @@ title = ''
 framework = 'reveal'
 
 [template]
-name = 'split'
+name = 'md_split'
 
 [theme]
-name = 'white'
+name = 'whiteboard'

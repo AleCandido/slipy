@@ -3,6 +3,8 @@ import importlib
 
 import toml
 
+assets_dir = ".presentation"
+
 # slipy project identification
 # ----------------------------
 

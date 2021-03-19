@@ -1,74 +1,55 @@
 # -*- coding: utf-8 -*-
 import pathlib
+import subprocess
 
-import pygit2
+import packutil as pack
 from setuptools import setup, find_packages
 
 # write version on the fly - inspired by numpy
 MAJOR = 0
-MINOR = 2
-MICRO = 3
-
-# Further release management
-# --------------------------
+MINOR = 3
+MICRO = 0
 
 repo_path = pathlib.Path(__file__).absolute().parent
-repo = pygit2.Repository(repo_path)
-
-# determine ids of tagged commits
-tags_commit_sha = [
-    repo.resolve_refish("/".join(r.split("/")[2:]))[0].id
-    for r in repo.references
-    if "/tags/" in r
-]
-ISRELEASED = "main" in repo.head.name or repo.head.target in tags_commit_sha
-SHORT_VERSION = "%d.%d" % (MAJOR, MINOR)
-VERSION = "%d.%d.%d" % (MAJOR, MINOR, MICRO)
 
 
-def write_version_py(filename="src/slipy/version.py"):
-    cnt = """
-# THIS FILE IS GENERATED FROM SETUP.PY
-major = %(major)d
-short_version = '%(short_version)s'
-version = '%(version)s'
-full_version = '%(full_version)s'
-is_released = %(isreleased)s
-"""
-    FULLVERSION = VERSION
-    if not ISRELEASED:
-        FULLVERSION += "-develop"
+def compile_assets():
+    httpwatcher_dir = repo_path / "src" / "slipy" / "reveal" / "httpwatcher"
 
-    a = open(filename, "w")
-    try:
-        a.write(
-            cnt
-            % {
-                "major": MAJOR,
-                "short_version": SHORT_VERSION,
-                "version": VERSION,
-                "full_version": FULLVERSION,
-                "isreleased": str(ISRELEASED),
-            }
-        )
-    finally:
-        a.close()
-
-
-# Actual setup
-# ------------
+    out_install = subprocess.run(
+        #  ["ls"],
+        ["yarn"],
+        capture_output=True,
+        cwd=httpwatcher_dir,
+    )
+    print(out_install.stdout.decode())
+    out_build = subprocess.run(
+        #  ["ls"],
+        ["yarn", "build"],
+        capture_output=True,
+        cwd=httpwatcher_dir,
+    )
+    print(out_build.stdout.decode())
 
 
 def setup_package():
+    compile_assets()
     # write version
-    write_version_py()
+    pack.versions.write_version_py(
+        MAJOR,
+        MINOR,
+        MICRO,
+        pack.versions.is_released(repo_path),
+        filename="src/slipy/version.py",
+    )
+    print("\n\nciao\n\n")
     # paste Readme
     with open("README.md", "r") as fh:
         long_description = fh.read()
     # do it
     setup(
         name="slipy",
-        version=VERSION,
+        version=pack.versions.mkversion(MAJOR, MINOR, MICRO),
         description="slides utility",
         long_description=long_description,
         long_description_content_type="text/markdown",
@@ -105,6 +86,7 @@ def setup_package():
             "rich",
         ],
         setup_requires=["wheel", "pygit2"],
+        extras_require={"utils": ["pyperclip", "Pillow"]},
         entry_points={
             "console_scripts": [
                 "slipy=slides_cli:run_slipy",

@@ -9,6 +9,7 @@ from . import build
 from . import view
 from . import export
 from . import inflate
+from . import utils
 from . import tutorial
 
 
@@ -41,6 +42,9 @@ export.add_parser(subparsers)
 
 # inflate
 inflate.add_parser(subparsers)
+
+# utils
+utils.add_parser(subparsers)
 
 # tutorial
 tutorial.add_parser(subparsers)

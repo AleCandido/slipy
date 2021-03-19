@@ -6,9 +6,9 @@ import shutil
 
 from jinja2 import Environment, FileSystemLoader
 
-from slipy_assets import Template
+from slipy_assets import Template, Theme
 
-from . import utils
+from . import update, utils
 from .reveal import reload
 
 
@@ -19,6 +19,7 @@ def build(folder, update_dist=False, update_assets=False):
 
     presentation_cfg = utils.load_cfg(project_dir)
     template_name = presentation_cfg["template"]["name"]
+    theme_name = presentation_cfg["theme"]["name"]
     framework = presentation_cfg["framework"]
     template = Template(template_name, framework)
 
@@ -33,7 +34,8 @@ def build(folder, update_dist=False, update_assets=False):
     # ---------
     data = {}
 
-    data["reveal_dist"] = ".reveal_dist"
+    data["reveal_dist"] = "reveal"
+    data["title"] = presentation_cfg["title"]
     data["theme"] = presentation_cfg["theme"]["name"]
 
     template.update_build_context(data, src_dir)
@@ -66,6 +68,13 @@ def build(folder, update_dist=False, update_assets=False):
     # provide dist
     # ------------
     dist = project_dir / utils.switch_framework(framework).dist_files
-    if not (build_dir / dist.name).exists() or update_dist:
+    if not (build_dir / data["reveal_dist"]).exists() or update_dist:
         shutil.rmtree(build_dir / dist.name, ignore_errors=True)
-        shutil.copytree(str(dist), str(build_dir / dist.name))
+        shutil.copytree(str(dist), str(build_dir / data["reveal_dist"]))
+
+    # update theme, if needed
+    # -----------------------
+    shutil.copy2(
+        project_dir / utils.assets_dir / (theme_name + ".css"),
+        build_dir / data["reveal_dist"] / "dist" / "theme",
+    )
