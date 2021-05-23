@@ -70,7 +70,6 @@ class Theme:
         theme_source = utils.switch_framework(self.framework).theme_path(
             self.name, project_dir, here
         )
-        __import__("pdb").set_trace()
         try:
             theme_source.relative_to(project_dir)
             # the theme is built-in, no need to update
